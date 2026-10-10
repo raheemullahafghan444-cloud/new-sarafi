@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صرافی تیمورشاهی</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Noto Sans Arabic', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .sidebar-link.active { background: #e5e7eb; border-right: 3px solid #f59e0b; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- صفحه ورود -->
+    <div id="loginPage" class="flex items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-amber-600">صرافی تیمورشاهی</h1>
+                <p class="text-gray-500 mt-2">سیستم مدیریت امور مالی و حواله</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نام کاربری</label>
+                    <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none" placeholder="admin">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">رمز عبور</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none" placeholder="123456">
+                </div>
+                <button onclick="login()" class="w-full bg-amber-500 text-white py-2 rounded-lg font-medium hover:bg-amber-600 transition">ورود به سیستم</button>
+                <p class="text-xs text-gray-400 text-center mt-4">نام کاربری: admin | رمز عبور: 123456</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه اصلی -->
+    <div id="mainPage" class="hidden">
+        <!-- بالای صفحه -->
+        <header class="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-amber-600">صرافی تیمورشاهی</h1>
+            <div class="flex items-center gap-4">
+                <span id="userName" class="text-sm text-gray-600"></span>
+                <button onclick="logout()" class="text-gray-500 hover:text-red-500"><i class="fa fa-sign-out"></i> خروج</button>
+            </div>
+        </header>
+
+        <div class="flex">
+            <!-- منوی کناری -->
+            <aside class="w-64 bg-white shadow-sm min-h-screen p-2">
+                <nav class="space-y-1">
+                    <a class="sidebar-link active flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('dashboard')">
+                        <i class="fa fa-home text-amber-500"></i> <span>داشبورد</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('dailybook')">
+                        <i class="fa fa-book text-amber-500"></i> <span>روزنامه روزانه</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('customers')">
+                        <i class="fa fa-users text-amber-500"></i> <span>مشتریان</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('debtors')">
+                        <i class="fa fa-balance-scale text-amber-500"></i> <span>بدهکاران و بستانکاران</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('hawala')">
+                        <i class="fa fa-exchange text-amber-500"></i> <span>حواله‌ها</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('partners')">
+                        <i class="fa fa-handshake-o text-amber-500"></i> <span>شریک‌ها</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('trading')">
+                        <i class="fa fa-line-chart text-amber-500"></i> <span>معاملات ارز</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('transactions')">
+                        <i class="fa fa-list-alt text-amber-500"></i> <span>تاریخچه تراکنش‌ها</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('expenses')">
+                        <i class="fa fa-money text-amber-500"></i> <span>مصارف</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('employees')">
+                        <i class="fa fa-id-card text-amber-500"></i> <span>کارمندان</span>
+                    </a>
+                    <a class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer" onclick="showTab('reports')">
+                        <i class="fa fa-bar-chart text-amber-500"></i> <span>گزارشات</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- محتوای اصلی -->
+            <main class="flex-1 p-6">
+                <!-- داشبورد -->
+                <div id="dashboard" class="tab-content active">
+                    <h2 class="text-xl font-semibold mb-6">داشبورد</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-500 text-sm">معاملات امروز</p>
+                            <p class="text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-500 text-sm">درآمد امروز</p>
+                            <p class="text-2xl font-bold text-green-600">0 افغانی</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-500 text-sm">هزینه‌های امروز</p>
+                            <p class="text-2xl font-bold text-red-500">0 افغانی</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-500 text-sm">تعداد مشتریان</p>
+                            <p class="text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-semibold mb-4">آخرین فعالیت‌ها</h3>
+                        <p class="text-gray-400">هنوز هیچ معامله‌ای ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- روزنامه -->
+                <div id="dailybook" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-6">روزنامه روزانه</h2>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <p class="text-gray-400">امروز هیچ معامله‌ای ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- مشتریان -->
+                <div id="customers" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">مشتریان</h2>
+                    <button class="bg-amber-500 text-white px-4 py-2 rounded-lg mb-4 hover:bg-amber-600">+ افزودن مشتری</button>
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-right">نام</th>
+                                    <th class="px-4 py-3 text-right">شماره تماس</th>
+                                    <th class="px-4 py-3 text-right">حساب</th>
+                                    <th class="px-4 py-3 text-right">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-400">هنوز مشتری‌ای ثبت نشده است</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- بدهکاران و بستانکاران -->
+                <div id="debtors" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">بدهکاران و بستانکاران</h2>
+                    <div class="flex gap-4 mb-4">
+                        <button class="px-4 py-2 bg-amber-500 text-white rounded-lg">بستانکاران</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg">بدهکاران</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <p class="text-gray-400">هنوز هیچ طلب و بدهی ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- حواله‌ها -->
+                <div id="hawala" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">حواله‌ها</h2>
+                    <div class="flex gap-4 mb-4">
+                        <button class="px-4 py-2 bg-green-500 text-white rounded-lg">ارسال حواله</button>
+                        <button class="px-4 py-2 bg-blue-500 text-white rounded-lg">دریافت حواله</button>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <p class="text-gray-400">هنوز هیچ حواله‌ای ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- شریک‌ها -->
+                <div id="partners" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">شریک‌ها و شعبه‌ها</h2>
+                    <button class="bg-amber-500 text-white px-4 py-2 rounded-lg mb-4 hover:bg-amber-600">+ افزودن شریک</button>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <p class="text-gray-400">هنوز شریکی ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- معاملات ارز -->
+                <div id="trading" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">معاملات ارز</h2>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <p class="text-gray-400">هنوز معامله‌ای انجام نشده است</p>
+                    </div>
+                </div>
+
+                <!-- تراکنش‌ها -->
+                <div id="transactions" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">تاریخچه تراکنش‌ها</h2>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <p class="text-gray-400">هنوز تراکنشی ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- مصارف -->
+                <div id="expenses" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">مصارف و هزینه‌ها</h2>
+                    <button class="bg-amber-500 text-white px-4 py-2 rounded-lg mb-4 hover:bg-amber-600">+ ثبت هزینه جدید</button>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <p class="text-gray-400">هنوز هزینه‌ای ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- کارمندان -->
+                <div id="employees" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">کارمندان</h2>
+                    <button class="bg-amber-500 text-white px-4 py-2 rounded-lg mb-4 hover:bg-amber-600">+ افزودن کارمند</button>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <p class="text-gray-400">هنوز کارمندی ثبت نشده است</p>
+                    </div>
+                </div>
+
+                <!-- گزارشات -->
+                <div id="reports" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-4">گزارشات</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <h3 class="font-medium mb-2">گزارش ماهانه</h3>
+                            <button class="w-full bg-amber-500 text-white py-2 rounded hover:bg-amber-600">دریافت گزارش</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <h3 class="font-medium mb-2">گزارش سالانه</h3>
+                            <button class="w-full bg-amber-500 text-white py-2 rounded hover:bg-amber-600">دریافت گزارش</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // ورود به سیستم
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if (user === 'admin' && pass === '123456') {
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('mainPage').classList.remove('hidden');
+                document.getElementById('userName').textContent = 'ادمین';
+            } else {
+                alert('نام کاربری یا رمز عبور اشتباه است!');
+            }
+        }
+
+        // خروج از سیستم
+        function logout() {
+            document.getElementById('mainPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // نمایش تب‌ها
+        function showTab(tabId) {
+            // پنهان کردن همه تب‌ها
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            // غیرفعال کردن همه لینک‌ها
+            document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+            
+            // نمایش تب انتخاب شده
+            document.getElementById(tabId).classList.add('active');
+            // فعال کردن لینک انتخاب شده
+            event.target.closest('.sidebar-link').classList.add('active');
+        }
+    </script>
+</body>
+</html>
